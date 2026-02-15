@@ -4,7 +4,7 @@
   "description": "Telegram bot that cuts audio/video clips from YouTube videos",
   "main": "bot.js",
   "scripts": {
-    "start": "node bot.js"
+    "start": "node --env-file=.env bot.js"
   },
   "dependencies": {
     "node-telegram-bot-api": "^0.66.0"

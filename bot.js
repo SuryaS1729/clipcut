@@ -213,7 +213,7 @@ async function processClip(chatId, url, startTime, endTime, mode, statusMsgId) {
           url,
         ]
       : [
-          '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+          '-f', 'bestvideo[height<=720][ext=mp4]+bestaudio[ext=m4a]/best[height<=720][ext=mp4]/best[height<=720]/best',
           '-o', downloadPath,
           '--merge-output-format', 'mp4',
           '--no-playlist',
