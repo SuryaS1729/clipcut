@@ -220,7 +220,7 @@ async function processClip(chatId, url, startTime, endTime, mode, statusMsgId) {
 
     const ytdlpArgs = isAudio
       ? [
-          '-f', 'bestaudio',
+          '-f', 'ba/b',
           '-o', downloadPath,
           '--no-playlist',
           '--no-warnings',
@@ -228,7 +228,7 @@ async function processClip(chatId, url, startTime, endTime, mode, statusMsgId) {
           url,
         ]
       : [
-          '-f', 'bestvideo[height<=720][ext=mp4]+bestaudio[ext=m4a]/best[height<=720][ext=mp4]/best[height<=720]/best',
+          '-f', 'bv*[height<=720]+ba/b[height<=720]/b',
           '-o', downloadPath,
           '--merge-output-format', 'mp4',
           '--no-playlist',
