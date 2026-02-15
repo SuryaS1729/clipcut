@@ -224,6 +224,8 @@ async function processClip(chatId, url, startTime, endTime, mode, statusMsgId) {
           '-o', downloadPath,
           '--no-playlist',
           '--no-warnings',
+          '--no-check-certificates',
+          '--extractor-args', 'youtube:player_client=mediaconnect',
           ...(USE_COOKIES ? ['--cookies', COOKIES_PATH] : []),
           url,
         ]
@@ -233,6 +235,8 @@ async function processClip(chatId, url, startTime, endTime, mode, statusMsgId) {
           '--merge-output-format', 'mp4',
           '--no-playlist',
           '--no-warnings',
+          '--no-check-certificates',
+          '--extractor-args', 'youtube:player_client=mediaconnect',
           ...(USE_COOKIES ? ['--cookies', COOKIES_PATH] : []),
           url,
         ];
