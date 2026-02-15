@@ -308,7 +308,10 @@ async function processClip(chatId, url, startTime, endTime, mode, statusMsgId) {
     let userMessage = '❌  Something went wrong while processing your clip.\n\n';
 
     if (err.message.includes('yt-dlp')) {
-      userMessage += 'Could not download from YouTube. Please check that the link is valid and the video is publicly available.';
+      userMessage += 'Could not download from YouTube. Please check that the link is valid and the video is publicly available.\n\n';
+      // Show the actual error for debugging
+      const detail = err.message.replace('yt-dlp failed: ', '').substring(0, 200);
+      userMessage += `Detail: ${detail}`;
     } else if (err.message.includes('ffmpeg')) {
       userMessage += 'Failed to cut the clip. The timestamps might be outside the video duration.';
     } else {
@@ -524,7 +527,21 @@ bot.on('polling_error', (error) => {
 });
 
 // ─────────────────────────────────────────────────────────────
-//  8. STARTUP
+//  8. HEALTH-CHECK SERVER (keeps Render free tier alive)
+// ─────────────────────────────────────────────────────────────
+
+const http = require('http');
+const PORT = process.env.PORT || 3000;
+
+http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('ClipCut bot is running!');
+}).listen(PORT, () => {
+  console.log(`🌐  Health-check server listening on port ${PORT}`);
+});
+
+// ─────────────────────────────────────────────────────────────
+//  9. STARTUP
 // ─────────────────────────────────────────────────────────────
 
 console.log('🤖  ClipCut bot is running!');
