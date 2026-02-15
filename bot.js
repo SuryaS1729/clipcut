@@ -46,6 +46,20 @@ if (!fs.existsSync(TMP_DIR)) fs.mkdirSync(TMP_DIR, { recursive: true });
 // Telegram file-size limits (in bytes)
 const TELEGRAM_FILE_LIMIT = 50 * 1024 * 1024; // 50 MB
 
+// YouTube cookies (for servers where YouTube blocks datacenter IPs)
+// Set YOUTUBE_COOKIES env var with base64-encoded cookies.txt content
+const COOKIES_PATH = path.join(TMP_DIR, 'cookies.txt');
+if (process.env.YOUTUBE_COOKIES) {
+  try {
+    const decoded = Buffer.from(process.env.YOUTUBE_COOKIES, 'base64').toString('utf-8');
+    fs.writeFileSync(COOKIES_PATH, decoded);
+    console.log('🍪  YouTube cookies loaded successfully.');
+  } catch (e) {
+    console.error('⚠️  Failed to decode YOUTUBE_COOKIES:', e.message);
+  }
+}
+const USE_COOKIES = fs.existsSync(COOKIES_PATH);
+
 // ─────────────────────────────────────────────────────────────
 //  2. IN-MEMORY STATE  (keyed by chatId)
 // ─────────────────────────────────────────────────────────────
@@ -210,6 +224,7 @@ async function processClip(chatId, url, startTime, endTime, mode, statusMsgId) {
           '-o', downloadPath,
           '--no-playlist',
           '--no-warnings',
+          ...(USE_COOKIES ? ['--cookies', COOKIES_PATH] : []),
           url,
         ]
       : [
@@ -218,6 +233,7 @@ async function processClip(chatId, url, startTime, endTime, mode, statusMsgId) {
           '--merge-output-format', 'mp4',
           '--no-playlist',
           '--no-warnings',
+          ...(USE_COOKIES ? ['--cookies', COOKIES_PATH] : []),
           url,
         ];
 
